@@ -26,30 +26,30 @@ def add_new_client(cur, name, surname, email, phone_number=None):
     # v.1 - Просто создаём запись в отношении client.
     if phone_number == None: 
         cur.execute("""
-            INSERT INTO client(name, surname, email) VALUES(%s, %s, %s);
-            """, (name, surname, email))
+        INSERT INTO client(name, surname, email) VALUES(%s, %s, %s);
+        """, (name, surname, email))
         conn.commit()
         print('Добавлена запись о новом клиенте.', commands, sep='\n')
     # v.2 - Создаём запись в отношении client, "вынимаем" оттуда id клиента и по нему добавляем номер в отношение phone.
     elif phone_number != None: 
         cur.execute("""
-            INSERT INTO client(name, surname, email) VALUES(%s, %s, %s);
-            """, (name, surname, email))
+        INSERT INTO client(name, surname, email) VALUES(%s, %s, %s);
+        """, (name, surname, email))
         cur.execute("""
-            SELECT id FROM client WHERE email=%s;
-            """, (email,))
+        SELECT id FROM client WHERE email=%s;
+        """, (email,))
         clients_id = cur.fetchone()[0]
         cur.execute("""
-            INSERT INTO phone(client_id, phone_number) VALUES(%s, %s);
-            """, (clients_id, phone_number))            
+        INSERT INTO phone(client_id, phone_number) VALUES(%s, %s);
+        """, (clients_id, phone_number))            
         conn.commit()
         print('Добавлена запись о новом клиенте.', commands, sep='\n')
         
 def add_new_phone(cur, client_id, phone_number):
     '''Добавление номера телефона.'''
     cur.execute("""
-        INSERT INTO phone(client_id, phone_number) VALUES(%s, %s);
-        """, (client_id, phone_number))
+    INSERT INTO phone(client_id, phone_number) VALUES(%s, %s);
+    """, (client_id, phone_number))
     conn.commit()
     print('Добавлен номер телефона.', commands, sep='\n')
 
@@ -94,8 +94,8 @@ def update_client_info(cur):
 def delete_phone_number(cur, client_id, phone_number):
     '''Удаление номера телефона.'''
     cur.execute("""
-        DELETE FROM phone WHERE client_id=%s AND phone_number=%s;
-        """, (client_id, phone_number))
+    DELETE FROM phone WHERE client_id=%s AND phone_number=%s;
+    """, (client_id, phone_number))
     conn.commit()
     print('Удалён номер телефона.', commands, sep='\n')
 
@@ -103,12 +103,12 @@ def delete_client(cur, client_id):
     '''Удаление клиента.'''
     # Сначала удаляется запись из отношения phone.
     cur.execute("""
-        DELETE FROM phone WHERE client_id=%s; 
-        """, (client_id,))
+    DELETE FROM phone WHERE client_id=%s; 
+    """, (client_id,))
     # Затем удаляется запись из отношения client. 
     cur.execute("""
-        DELETE FROM client WHERE id=%s;
-        """, (client_id,))
+    DELETE FROM client WHERE id=%s;
+    """, (client_id,))
     conn.commit()
     print('Удалён клиент.', commands, sep='\n')
 
